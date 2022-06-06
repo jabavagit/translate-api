@@ -104,7 +104,7 @@ export const MODEL_FILE_DB = {
     projects: [] 
 };
 export const PATH = {
-    IMPORT_URI: 'C:/Dev/Iberia/iberia-web-content/literales/',
+    IMPORT_URI: 'C:/URL/FOLDER/',
     IMPORT: './import/literals/',
     IMPORT_FILE: './import/import-translates.json',
     IMPORT_FILE_EXCEL: './export/excelToJson/excelToJson.json',
