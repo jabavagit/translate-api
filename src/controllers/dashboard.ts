@@ -43,11 +43,15 @@ export const init = async () => {
         if (readDataDir.length > 0) {
             let dataDir = await filesctrl(readDataDir);
             const dataFiles = await readFiles(dataDir);
-            let result: any = dbSrv.saveData('projects', dataFiles);
+            if(dataFiles) {
+                let result: any = dbSrv.saveData('projects', dataFiles);
+                dashboard.menu = getItemsMenu(dataProjects);
+                dashboard.show.menu = (dashboard.menu.length > 0);
+                header.show = (dashboard.menu.length > 0);
+            } else {
+                console.error('[init][import] - save data undefined');
+            }
 
-            dashboard.menu = getItemsMenu(dataProjects);
-            dashboard.show.menu = (dashboard.menu.length > 0);
-            header.show = (dashboard.menu.length > 0);
         } else {
             // TODO: control de errores
             console.warn('[init][import] - Carpeta vacia "./importar/literals/..."');

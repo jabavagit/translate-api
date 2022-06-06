@@ -10,7 +10,6 @@ import _, { cloneDeep, values } from 'lodash';
 import { info } from 'console';
 import * as utils from '../utils/utils';
 import * as XLSX from 'xlsx';
-//var XLSX = require("xlsx");
 
 const constants: any = {
     lang: LANGS,
@@ -89,6 +88,9 @@ export const readFiles = async (dataDir: any) => {
                     const uri = project.path[lang];
                     const _lang: any = lang;
                     const jsonData = await fse.readJson(uri, { throws: false });
+                    if(jsonData === undefined || jsonData === null) {
+                        console.log(`Project::${project.name}::uri::${uri}::JSON is incorrect`);
+                    }
                     const jsonDataOrdered = Object.keys(jsonData).sort().reduce(
                         (obj: any, key: any) => {
                             obj[key] = jsonData[key];
@@ -243,8 +245,7 @@ export const excel = () => {
         arrLangs: []
     };
     // Reading our test file
-    //const file = XLSX.readFile('./import/excel/template-translate.xlsx');
-    const file = XLSX.readFile('./import/excel/excel3.XLSX');
+    const file = XLSX.readFile(PATH.IMPORT_FILE);
     let data: any = [];
 
     const sheets = file.SheetNames;
