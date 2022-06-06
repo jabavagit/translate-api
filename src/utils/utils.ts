@@ -1,4 +1,8 @@
-import _ from "lodash";
+import { IFiltersCount, IProject, ILiteral, ILang, IHome, IAlerts } from './../interfaces/interfaces';
+import _, { result } from "lodash";
+import { ALERTS, FILTERS_COUNT, LANGS_TYPES } from '../constants';
+
+let alerts: IAlerts;
 
 export const controlErrors = (error: any) => {
     if (error.response && error.response.status) {
@@ -66,8 +70,8 @@ export const getInfoDataToProjects = (model: any): any => {
         let countU: number = 0;
 
         _.forEach(project.literals, (_literal: any) => {
-            const arrLangs = Object.keys(_literal.lang).map((name) => {
-                let values = _literal.lang[name];
+            const arrLangs = Object.keys(_literal.langs).map((name) => {
+                let values = _literal.langs[name];
                 return values;
             });
             countM = 0;
@@ -114,3 +118,104 @@ export const dataResponse = (code: number, message: string, data: any) => {
 
     return response;
 };
+
+
+export const getInfoFiltersToProjects = (project: IProject, typeFilter: string): IFiltersCount => {
+    let result: any = _.cloneDeep(FILTERS_COUNT);
+
+    let _countMissing: number = 0;
+    let _countUntranslated: number = 0;
+    let countM: number = 0;
+    let countU: number = 0;
+
+    _.forEach(project.literals, (_literal: ILiteral) => {
+        const arrLangs: ILang[] = Object.keys(_literal.langs).map((name) => {
+            let values = _literal.langs[name];
+            return values;
+        });
+        countM = 0;
+        countU = 0;
+        _.forEach(arrLangs, (value: any) => {
+            if (value === '') {
+                countU++;
+            }
+
+            if (value.length > 0) {
+                countM++;
+            }
+        });
+
+        if (countM < arrLangs.length) {
+            _countMissing++;
+        }
+
+        if (countU === arrLangs.length) {
+            _countUntranslated++;
+        }
+    });
+
+    result = {
+        all: {
+            count: (project.literals?.length) ? project.literals?.length : 0,
+            active: false
+        },
+        missing: {
+            count: _countMissing,
+            active: false
+        },
+        untranslated: {
+            count: _countUntranslated,
+            active: false
+        }
+    };
+
+    result[typeFilter].active = true;
+
+    return result;
+};
+
+
+export const execShellCommand = (cmd: string) => {
+    const exec = require('child_process').exec;
+    return new Promise((resolve, reject) => {
+        exec(cmd, (error: any, stdout: any, stderr: any) => {
+            if (error) {
+                console.warn(error);
+            }
+            resolve(stdout ? stdout : stderr);
+        });
+    });
+};
+
+export const setAlerts = (type: string, text: string, strong?: string) => {
+    alerts = {
+        strong: strong ? strong : type.toUpperCase(),
+        styles: ALERTS[type.toUpperCase()],
+        text,
+        show: true
+    };
+};
+
+export const resetAlert = () => {
+    alerts = {
+        strong: '',
+        styles: '',
+        text: '',
+        show: false
+    };
+};
+
+export const getLang = (lang: string): string => {
+    let result = 'ES';
+    for (const key in LANGS_TYPES) {
+        if (Object.prototype.hasOwnProperty.call(LANGS_TYPES, key)) {
+            const arrTypes = LANGS_TYPES[key];
+            if (arrTypes.includes(lang)) {
+                result = key;
+            }
+        }
+    }
+    return result.toUpperCase();
+};
+
+export const getAlerts = () => {return alerts;};

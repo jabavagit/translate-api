@@ -1,0 +1,114 @@
+<div class="container">
+    <form action="/import" name="importform" method="post" id="form-import">
+        <div class="accordion" id="accordionImport">
+            <% dashboard.import.forEach(function(item, index) { %>
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="heading<%= index %>">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#collapse<%= index %>" aria-expanded="false"
+                            aria-controls="collapse<%= index %>" id="btn-collapse-<%= index %>" >
+                            <%= item.name %>
+                        </button>
+                    </h2>
+                    <div id="collapse<%= index %>" class="accordion-collapse collapse"
+                        aria-labelledby="heading<%= index %>" data-bs-parent="#accordionImport">
+                        <div class="accordion-body">
+                            <!-- ******************************************************************* -->
+                            <div class="card import-card">
+                                <div class="card-body">
+                                    <div class="card-text">
+                                        <div class="row mb-5">
+                                            <div class="col-md-6 form-group">
+                                                <label for="name-literal-<%= index %>" class="form-label"
+                                                    for="name-literal-<%= index %>">Nombre</label>
+                                                <input class="form-control" id="name-literal-<%= index %>"
+                                                    placeholder="Nombre literal"
+                                                    name="importform[<%= index %>][nameLiteral]" value="<%= item.name %>"
+                                                    required>
+                                                    <div class="invalid-feedback" id="error-valid-<%= index %>">
+                                                        Campo obligatorio.
+                                                    </div>
+                                                    <div class="invalid-feedback" id="error-exist-<%= index %>" disabled>
+                                                        Ya existe en el proyecto seleccionado. Cambie el nombre.
+                                                    </div>
+                                            </div>
+                                            <div class="col-md-6 form-group">
+                                                <label for="select-project-<%= index %>" class="form-label"
+                                                    for="select-project-<%= index %>">Selecciona Proyecto</label>
+                                                <select class="form-select" id="select-project-<%= index %>"
+                                                    name="importform[<%= index %>][idProject]" required>
+                                                    <option selected disabled value="" class="text-muted">Seleccione proyecto...</option>
+                                                    <% dashboard.menu.forEach(function(project) { %>
+                                                        <option value="<%= project.id %>">
+                                                            <%= project.name %>
+                                                        </option>
+                                                        <% }); %>
+                                                </select>
+                                                <div class="invalid-feedback">
+                                                    Campo obligatorio.
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <ul class="nav nav-tabs mb-3" id="ul-langs-import">
+                                            <% item.arrLangs.forEach(function(lang, indexLang) { %>
+                                                <% if(lang==='ES' ) { %>
+                                                    <li class="nav-item">
+                                                        <a class="nav-link active text-secondary" data-bs-toggle="tab"
+                                                            href="#lang-<%= index %>-<%= lang %>"
+                                                            id="tab-<%= index %>-<%= lang %>">
+                                                            <%= lang %>
+                                                        </a>
+                                                    </li>
+                                                    <% } else { %>
+                                                        <li class="nav-item">
+                                                            <a class="nav-link text-secondary" data-bs-toggle="tab"
+                                                                href="#lang-<%= index %>-<%= lang %>"
+                                                                id="tab-<%= index %>-<%= lang %>">
+                                                                <%= lang %>
+                                                            </a>
+                                                        </li>
+                                                        <% } %>
+                                                            <% }); %>
+                                        </ul>
+
+                                        <div id="importTabContent-<%= index %>" class="tab-content">
+                                            <% item.arrLangs.forEach(function(lang, indexLang) { %>
+                                                <% if(lang==='ES' ) { %>
+                                                    <div class="tab-pane fade active show"
+                                                        id="lang-<%= index %>-<%= lang %>">
+                                                        <textarea class="form-control"
+                                                            id="textarea-<%= index %>-<%= lang %>"
+                                                            name="importform[<%= index %>][langs][<%= lang %>]"><%= item.langs[lang] %></textarea>
+                                                    </div>
+                                                    <% } else { %>
+                                                        <div class="tab-pane fade" id="lang-<%= index %>-<%= lang %>">
+                                                            <textarea class="form-control"
+                                                                id="textarea-<%= index %>-<%= lang %>"
+                                                                name="importform[<%= index %>][langs][<%= lang %>]"><%= item.langs[lang] %></textarea>
+                                                        </div>
+                                                        <% } %>
+                                                            <% }); %>
+                                        </div>
+
+
+
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- ******************************************************************* -->
+                        </div>
+                    </div>
+                </div>
+
+                <% }); %>
+
+                <div class="d-flex justify-content-end align-items-center flex-fill mt-5">
+                    <a title="Cancelar" href="/" type="button" class="btn btn-link mx-5">Cancelar</a>
+                    <button type="submit" class="btn btn-primary btn-lg" id="btn-form-import">
+                        <span>Guardar</span>
+                    </button>
+                </div>
+        </div>
+    </form>
+</div>

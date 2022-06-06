@@ -1,0 +1,23 @@
+{
+	"name": "import",
+	"version": "1",
+	"descriprion": "Example import literals and translates",
+	"translates": [
+		{
+          "name": "TEXT_1",
+          "langs": {
+            "CA": "Ho lamentem",
+            "DE": "Es tut uns leid",
+            "EN": "Sorry",
+            "ES": "Lo sentimos",
+            "FR": "Nous sommes désolés.",
+            "IT": "Siamo spiacenti",
+            "JA": "申し訳ございません",
+            "NL": "Het spijt ons",
+            "PT": "Lamentamos",
+            "RU": "Приносим свои извинения",
+            "ZH": "很抱歉"
+          }
+        }
+	]
+}

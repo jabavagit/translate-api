@@ -1,32 +1,39 @@
+import { log } from 'console';
 import * as express from 'express';
-const router = express.Router();
-import * as service from '../services/service';
-const importFileCtrl = require('../controllers/import-file');
+import routesProjects from './projects/projects.routes';
+import routesApi from './api/api.routes';
+import * as dashboardCtrl from '../controllers/dashboard';
+import { setAlerts } from '../utils/utils';
 
-router.get('/init', async (req: any, res: any) => {
-    let data = await service.init();
+export const register = (app: express.Application) => {
+    // home page
+    app.get('/', async (req: any, res: any) => {
+        const model: any = await dashboardCtrl.init();
+        res.render('index', model);
+    }).get('/import/:type', async (req: any, res: any) => {
+        const { type } = req.params;
+        const model: any = await dashboardCtrl.importFile(type);
+        if (type === 'origin') {
+            setAlerts('SUCCESS', 'importar origin.');
+            res.redirect('/');
+        } else {
+            res.render('index', model);
+        }
+    }).post('/import', async (req: any, res: any) => {
+        const result: any = dashboardCtrl.importForm(req.body);
+        log(result);
+        res.redirect('/');
+    }).get('/import-info', async (req: any, res: any) => {
+        const { idProject, nameLiteral } = req.query;
+        const data: any = dashboardCtrl.searchLiterals(idProject, nameLiteral);
+        const existLiteral = data ? true : false;
+        res.json({existLiteral});
+    }).get('/search', async (req: any, res: any) => {
+        const { search } = req.query;
+        const result: any = dashboardCtrl.search(search);
+        res.json(result);
+    });
 
-    res.json(data);
-});
-
-router.get('/projects/:id', async (req: any, res: any) => {
-    let data = await service.getProjects(req.params.id);
-
-    res.json(data);
-});
-
-router.post('/project/:id', async (req: any, res: any) => {
-    let data = await service.setLiteral(Number(req.params.id), req.body);
-
-    res.json(data);
-});
-
-router.get('/json/:id', async (req: any, res: any) => {
-    let data = await service.getGeneralteJsonProjects(req.params.id);
-
-    res.json(data);
-});
-
-router.get('/import', importFileCtrl.importFile);
-
-module.exports = router;
+    app.use('/projects', routesProjects);
+    app.use('/api', routesApi);
+};

@@ -1,16 +1,18 @@
 import dotenv from 'dotenv';
 import express from 'express';
+import path from 'path';
 const morgan = require('morgan');
 import { PORT } from './constants';
 const createError = require('http-errors');
 const routes = require('./routes/routes');
 const cors = require('cors');
-import * as dbServices from './services/db-services';
+import * as dbSrv from './services/db';
+import * as dashboardCtrl from './controllers/dashboard';
 
 const port = PORT.SERVER;
 const app = express();
 
-dbServices.init();
+dbSrv.init();
 
 /********************************************************************
  * SERVER
@@ -21,7 +23,13 @@ app.use(morgan('dev'));
 app.use(cors());
 app.use(express.urlencoded({ limit: '50mb', extended: true}));
 app.use(express.json({ limit: '50mb' }));
-app.use('/api', routes);
+
+app.set('views', path.join(__dirname, 'views'));
+app.set('view engine', 'ejs');
+app.use('/public', express.static(path.join(__dirname, 'public')));
+
+// Configure routes
+routes.register(app);
 
 // catch 404 and forward to error handler
 app.use(function (req: any, res: any, next: any) {
@@ -42,6 +50,7 @@ app.use(function (err: any, req: any, res: any, next: any) {
 });
 
 // start the express server
-app.listen(port, () => {
-    console.log(`[SERVER]: Server is running at http://localhost:${port}`);
+app.listen(port, async () => {
+    console.debug(`[SERVER]: Server is running at http://localhost:${port}`);
+    await dashboardCtrl.init();
 });

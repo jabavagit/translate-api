@@ -1,0 +1,17 @@
+/* ==========================================================================
+   Author's custom styles
+   ========================================================================== */
+
+body {
+  background-color: #f9f9f9;
+}
+
+
+.import-card  {
+  background-color: #f9f9f9;
+}
+
+.active2 {
+  border-right: 2px solid rgb(212, 57, 57) !important;
+  color: black !important;
+}

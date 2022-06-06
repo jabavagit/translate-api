@@ -1,22 +1,22 @@
-import * as scanFiles from '../utils/scan-files';
-import * as dbServices from '../services/db-services';
+import * as filesctrl from '../controllers/files';
+import * as dbSrv from './db';
 import * as utils from '../utils/utils';
 
 export const init = async () => {
     let model: any;
-    let readDir = scanFiles.readDir();
+    let readDir = filesctrl.readDir();
     if (readDir.length > 0) {
-        let dataDir = await scanFiles.scanFiles(readDir);
-        const dataFiles = await scanFiles.readFiles(dataDir);
-        let result: any = dbServices.saveData('projects', dataFiles);
+        let dataDir = await filesctrl.filesctrl(readDir);
+        const dataFiles = await filesctrl.readFiles(dataDir);
+        let result: any = dbSrv.saveData('projects', dataFiles);
 
-        const dataProjects = dbServices.getData();
+        const dataProjects = dbSrv.getData();
         model = utils.getInfoDataToProjects(dataProjects);
     } else {
         model = {
             error: {
                 status: true,
-                message: '[API] - Carpeta INPUT vacia'
+                message: '[API] - Carpeta IMPORT vacia'
             }
         };
     }
@@ -27,22 +27,26 @@ export const init = async () => {
 
 
 export const getProjects = async (id: number) => {
-    let result: any = dbServices.getDataById(Number(id));
+    let result: any = dbSrv.getDataById(Number(id));
 
     return result;
 };
 
-export const setLiteral = async (id: number, data: any) => {
-    return dbServices.setLiteral(id, data);
+export const setLiteral = (id: number, data: any) => {
+    return dbSrv.setLiteral(id, data);
 }
 
 export async function getGeneralteJsonProjects(id: number) {
     const dataProject: any = await getProjects(id);
-    const resultExportProject: any = await scanFiles.exportProjectToFile(dataProject);
+    const resultExportProject: any = await filesctrl.exportProjectToFile(dataProject);
     return 'siii';
 }
-export const getFileImport = async () => {
-    const dataFile = await scanFiles.readFileImport();
+export const getFileImport = async (typeFile?: string) => {
+    const dataFile = await filesctrl.readFileImport(typeFile);
     return dataFile;
 }
 
+
+export const importOrigin = async () => {
+    await dbSrv.init(true);
+}
