@@ -146,7 +146,9 @@ export const readFiles = async (dataDir: any) => {
 export const exportProjectToFile = async (data: any): Promise<any> => {
     try {
         let url_ok: boolean = false;
-        const path = _.cloneDeep(PATH.IMPORT);
+        //const _pathExport = _.cloneDeep(PATH.EXPORT_URI);
+        const _pathExport = _.cloneDeep(PATH.IMPORT_URI);
+
         if (!fs.existsSync(PATH.EXPORT)) {
             fs.mkdirSync(PATH.EXPORT);
         }
@@ -165,7 +167,7 @@ export const exportProjectToFile = async (data: any): Promise<any> => {
 
             if (urlToLang.split('literales').length > 0) {
                 const dataFileExport: any = {};
-                let endPath = PATH.EXPORT_URI + urlToLang.split('literales')[1];
+                let endPath = _pathExport + urlToLang.split('literales')[1];
                 if (urlToLang.split('literales')[1].length > 0 && urlToLang.split('literales')[1][urlToLang.split('literales')[1].length - 1] !== '/') {
                     endPath = endPath + '/';
                 }
@@ -188,7 +190,8 @@ export const exportProjectToFile = async (data: any): Promise<any> => {
 
 const writeFileToDirExport = async (url: string, data: any) => {
     try {
-        const _url = (url[url.length - 1] === '/') ? url.slice(0, -1) : url;
+        let _url = (url[url.length - 1] === '/') ? url.slice(0, -1) : url;
+        _url = _url.replace('//','/');
         //const result = await fse.outputJson(_url, JSON.stringify(_.cloneDeep(data), null, 4));
         const result = await fse.outputFile(_url, JSON.stringify(_.cloneDeep(data), null, 4));
         const options = { ignoreCase: true, reverse: false, depth: 1 };
