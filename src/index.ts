@@ -11,6 +11,7 @@ import * as dashboardCtrl from './controllers/dashboard';
 
 const port = PORT.SERVER;
 const app = express();
+let engine = 'angular';
 
 dbSrv.init();
 
@@ -18,15 +19,19 @@ dbSrv.init();
  * SERVER
  ******************************************************************* */
 dotenv.config();
+engine = (process.argv && process.argv.length > 0 && process.argv[process.argv.length-1]) ? process.argv[process.argv.length-1] : engine;
 
 app.use(morgan('dev'));
 app.use(cors());
 app.use(express.urlencoded({ limit: '50mb', extended: true}));
 app.use(express.json({ limit: '50mb' }));
 
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'ejs');
-app.use('/public', express.static(path.join(__dirname, 'public')));
+if(engine === 'ejs') {
+    app.set('views', path.join(__dirname, 'views'));
+    app.set('view engine', 'ejs');
+    app.use('/public', express.static(path.join(__dirname, 'public')));
+}
+
 
 // Configure routes
 routes.register(app);

@@ -2,11 +2,12 @@ import * as express from 'express';
 const router = express.Router();
 import * as service from '../../services/service';
 const importFileCtrl = require('../../controllers/import-file');
+import * as dashboardCtrl from '../../controllers/dashboard';
 
 router.get('/init', async (req: any, res: any) => {
-    let data = await service.init();
-
-    res.json(data);
+    //let data = await service.init();
+    const model: any = await dashboardCtrl.init();
+    res.json(model);
 });
 
 router.get('/projects/:id', async (req: any, res: any) => {
