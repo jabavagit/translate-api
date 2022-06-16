@@ -1,4 +1,4 @@
-import { Lang, Literal, Project, modelProjects } from './../interfaces/interfaces';
+import { Lang, Literal, Project, modelProjects } from '../types/types';
 const fs = require('fs');
 const fse = require('fs-extra');
 const rimraf = require('rimraf');

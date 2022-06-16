@@ -1,4 +1,4 @@
-import { IFiltersCount, IProject, ILiteral, ILang, IHome, IAlerts } from './../interfaces/interfaces';
+import { IFiltersCount, IProject, ILiteral, ILang, IHome, IAlerts } from '../types/types';
 import _, { result } from "lodash";
 import { ALERTS, FILTERS_COUNT, LANGS_TYPES } from '../constants';
 

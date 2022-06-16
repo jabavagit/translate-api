@@ -1,4 +1,3 @@
-import { Literal } from './../interfaces/interfaces';
 import _ from "lodash";
 import { MODEL_FILE_DB } from "../constants";
 import * as utils from '../utils/utils';

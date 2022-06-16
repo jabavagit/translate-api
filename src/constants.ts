@@ -1,4 +1,4 @@
-import { IProjects, ILiteral, ILang, IFilters, IFiltersType, IFiltersCount } from './interfaces/interfaces';
+import { IProjects, ILiteral, ILang, IFilters, IFiltersType, IFiltersCount } from './types/types';
 
 export const PROJECTS = [];
 export const LANGS_ARR = ['ca', 'de', 'en', 'es', 'fr', 'it', 'ja', 'nl', 'pt', 'ru', 'zh'];
@@ -104,9 +104,9 @@ export const MODEL_FILE_DB = {
     projects: [] 
 };
 export const PATH = {
-    IMPORT_URI: 'C:/URL/FOLDER/',
+    IMPORT_URI: 'C:/Dev/Iberia/iberia-web-content/literales/',
     IMPORT: './import/literals/',
-    IMPORT_FILE: './import/excel/template-translate.xlsx',
+    IMPORT_FILE: './import/import-translates.xlsx',
     IMPORT_FILE_EXCEL: './export/excelToJson/excelToJson.json',
     DB: '/db/',
     EXPORT: './export',

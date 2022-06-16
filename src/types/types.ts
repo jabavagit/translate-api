@@ -1,4 +1,4 @@
-export interface ILiteral {
+export type ILiteral = {
     id: number;
     name: string;
     langs: ILang | any;
@@ -6,7 +6,7 @@ export interface ILiteral {
     isNew?: boolean;
 };
 
-export interface ILang {
+export type ILang = {
     CA?: string | any;
     DE?: string | any;
     EN?: string | any;
@@ -20,7 +20,7 @@ export interface ILang {
     ZH?: string | any;
 };
 
-export interface IProject {
+export type IProject = {
     id?: number | undefined;
     name?: string;
     literals?: ILiteral[] | any[];
@@ -28,29 +28,29 @@ export interface IProject {
     filters?: IFiltersCount
 };
 
-export interface IProjects {
+export type IProjects = {
     projects: IProject[]
 };
 
-export interface IMenu {
+export type IMenu = {
     id: number,
     name: string,
     countLiterals: number,
     langs: ILang[]
 }
 
-export interface IHome {
+export type IHome = {
     title: string;
     header: IHeader;
     dashboard?: IDashboard;
 }
 
-export interface IHeader {
+export type IHeader = {
     show: boolean;
     breadcrumb: IBreadcrumb[]
 }
 
-export interface IBreadcrumb {
+export type IBreadcrumb = {
     id: number;
     name: string;
     url: string;
@@ -61,13 +61,13 @@ export interface IBreadcrumb {
     }
 }
 
-export interface IItemMenu {
+export type IItemMenu = {
     id: number | undefined;
     name: string | undefined;
     countLiterals?: number | undefined;
 }
 
-export interface IDashboard {
+export type IDashboard = {
     show: {
         project: boolean;
         formLiteral: boolean;
@@ -80,47 +80,53 @@ export interface IDashboard {
     import?: IImportFile[];
     menu: IItemMenu[];
     alerts?: IAlerts;
+    url?: IUrl;
 }
 
-export interface IAlerts {
+export type IUrl = {
+    importOrigin?: string;
+    importExcel?: string;
+}
+
+export type IAlerts = {
     strong: string;
     text: string;
     styles: string;
-    show?:boolean;
+    show?: boolean;
 }
-export interface IImportFile {
+export type IImportFile = {
     name: string;
     langs: ILang;
     nameProject?: string;
     arrLangs: Array<string>
 }
 
-export interface IFormLiteral {
+export type IFormLiteral = {
     isNew: boolean;
     literal: ILiteral;
     langs: Array<string>;
     selectLang: string;
 }
 
-export interface IItemLiteral {
+export type IItemLiteral = {
     id: number;
     name: string;
     langs: ILang;
 }
 
-export interface IFilters {
+export type IFilters = {
     all: IItemLiteral[],
     missing: IItemLiteral[],
     untranslated: IItemLiteral[]
 }
 
-export interface IFiltersType {
+export type IFiltersType = {
     ALL: string,
     MISSING: string,
     UNTRANSLATED: string
 }
 
-export interface IFiltersCount {
+export type IFiltersCount = {
     all: {
         count: number,
         active: boolean

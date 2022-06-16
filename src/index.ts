@@ -11,7 +11,7 @@ import * as dashboardCtrl from './controllers/dashboard';
 
 const port = PORT.SERVER;
 const app = express();
-let engine = 'angular';
+let engine = 'ejs';
 
 dbSrv.init();
 
@@ -34,7 +34,7 @@ if(engine === 'ejs') {
 
 
 // Configure routes
-routes.register(app);
+routes.register(app, engine);
 
 // catch 404 and forward to error handler
 app.use(function (req: any, res: any, next: any) {
@@ -56,6 +56,7 @@ app.use(function (err: any, req: any, res: any, next: any) {
 
 // start the express server
 app.listen(port, async () => {
-    console.debug(`[SERVER]: Server is running at http://localhost:${port}`);
+    console.debug(`[SERVER] is running at http://localhost:${port}`);
+    console.debug(`[SERVER] engine: ${engine}`);
     await dashboardCtrl.init();
 });

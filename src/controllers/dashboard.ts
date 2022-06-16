@@ -1,11 +1,11 @@
 import { getAlerts, resetAlert } from './../utils/utils';
-import { IBreadcrumb, IFilters, IImportFile, ILiteral, IProject } from './../interfaces/interfaces';
+import { IBreadcrumb, IFilters, IImportFile, ILiteral, IProject } from '../types/types';
 import filesctrl, { excel, exportProjectToFile, readDir, readFiles } from "./files";
 import * as dbSrv from "../services/db";
 import * as srv from "../services/service";
-import { IItemMenu, IHeader, IDashboard, IHome } from "../interfaces/interfaces";
+import { IItemMenu, IHeader, IDashboard, IHome } from "../types/types";
 import _ from "lodash";
-import { FILTERS_TYPE, LANGS_ARR, LITERAL, URL_LANG } from '../constants';
+import { FILTERS_TYPE, LANGS_ARR, LITERAL, PATH, URL_LANG } from '../constants';
 import { execShellCommand, getInfoFiltersToProjects } from '../utils/utils';
 import { log } from 'console';
 import * as shelljs from 'shelljs'
@@ -29,7 +29,11 @@ export const init = async () => {
             menu: false,
             alerts: false
         },
-        menu: []
+        menu: [],
+        url: {
+            importExcel: PATH.IMPORT_FILE,
+            importOrigin: PATH.IMPORT_URI
+        }
     };
 
     const dataProjects = dbSrv.getData();

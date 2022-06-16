@@ -1,4 +1,4 @@
-import { IImportFile, ILang, ILiteral, IProject, IProjects } from '../interfaces/interfaces';
+import { IImportFile, ILang, ILiteral, IProject, IProjects } from '../types/types';
 const fs = require('fs');
 const fse = require('fs-extra');
 const rimraf = require('rimraf');

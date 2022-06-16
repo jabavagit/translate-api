@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "start": "npm run build && node dist/index.js",
-    "dev": "nodemon -e ts,js,ejs,html,css -w . -w public -w views -w routes -w models  src/index.ts --ignore ./import/ --ignore ./export/  --ignore ./src/db/",
+    "dev:ejs": "nodemon -e ts,js,ejs,html,css -w . -w public -w views -w routes -w models  src/index.ts --ignore ./import/ --ignore ./export/  --ignore ./src/db/ ejs",
+    "dev:angular": "nodemon -e ts,js,ejs,html,css -w . -w public -w views -w routes -w models  src/index.ts --ignore ./import/ --ignore ./export/  --ignore ./src/db/ angular",
     "build": "npm run clean && npm run copy:all && npx mkdirp ./dist/import && tsc",
     "lint": "tslint -c tslint.json -p tsconfig.json",
     "excel": "node src/controllers/excel-translates.js",

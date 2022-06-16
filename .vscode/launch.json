@@ -5,8 +5,14 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "command": "npm run dev",
-            "name": "Run npm dev",
+            "command": "npm run dev:ejs",
+            "name": "Dev api ejs",
+            "request": "launch",
+            "type": "node-terminal"
+        },
+        {
+            "command": "npm run dev:angular",
+            "name": "Dev api angular",
             "request": "launch",
             "type": "node-terminal"
         }
