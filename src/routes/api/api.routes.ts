@@ -8,24 +8,31 @@ router.get('/init', async (req: any, res: any) => {
     //let data = await service.init();
     const model: any = await dashboardCtrl.init();
     res.json(model);
-});
-
-router.get('/projects/:id', async (req: any, res: any) => {
+}).get('/projects/:id', async (req: any, res: any) => {
     let data = await service.getProjects(req.params.id);
-
     res.json(data);
-});
-
-router.post('/project/:id', async (req: any, res: any) => {
+}).post('/project/:id', async (req: any, res: any) => {
     let data = await service.setLiteral(Number(req.params.id), req.body);
-
     res.json(data);
-});
-
-router.get('/json/:id', async (req: any, res: any) => {
+}).get('/json/:id', async (req: any, res: any) => {
     let data = await service.getGeneralteJsonProjects(req.params.id);
-
     res.json(data);
+}).get('/import/:type', async (req: any, res: any) => {
+    const { type } = req.params;
+    const model: any = await dashboardCtrl.importFile(type);
+    if (type === 'origin') {
+        //setAlerts('SUCCESS', 'importar origin.');
+        res.json({
+            status: 200,
+            code: 200
+        });
+    } else {
+        res.json({
+            status: 200,
+            code: 200,
+            data: model.dashboard.import
+        });
+    }
 });
 
 router.get('/import', importFileCtrl.importFile);

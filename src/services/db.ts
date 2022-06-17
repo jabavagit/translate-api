@@ -9,22 +9,24 @@ const FileSync = require('lowdb/adapters/FileSync');
 let db: any = null;
 
 export const init = async (resetDB?: boolean) => {
+    const urlDB = URL_DB;
+    const fileDB = DB_FILE;
     try {
         resetDB = _.isBoolean(resetDB) ? resetDB : false;
 
-        if (!fs.existsSync(URL_DB)) {
-            fs.mkdirSync(URL_DB);
+        if (!fs.existsSync(urlDB)) {
+            fs.mkdirSync(urlDB);
         }
         
-        if (fs.existsSync(`${URL_DB}/${DB_FILE}`) && resetDB) {
+        if (fs.existsSync(`${urlDB}/${fileDB}`) && resetDB) {
             db.get("projects")
             .remove()
             .write();
             setDB(null);
-            rmfr(`${URL_DB}/${DB_FILE}`);
+            rmfr(`${urlDB}/${fileDB}`);
         }
 
-        const adapter = new FileSync(`${URL_DB}/${DB_FILE}`);
+        const adapter = new FileSync(`${urlDB}/${fileDB}`);
         setDB(lowDB(adapter));
         MODEL_FILE_DB.createDate = new Date().toJSON();
         db.defaults(MODEL_FILE_DB).write();

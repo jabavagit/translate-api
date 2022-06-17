@@ -106,7 +106,7 @@ export const MODEL_FILE_DB = {
 export const PATH = {
     IMPORT_URI: 'C:/Dev/Iberia/iberia-web-content/literales/',
     IMPORT: './import/literals/',
-    IMPORT_FILE: './import/import-translates.xlsx',
+    IMPORT_FILE: './import/excel/template-translate.xlsx',
     IMPORT_FILE_EXCEL: './export/excelToJson/excelToJson.json',
     DB: '/db/',
     EXPORT: './export',
