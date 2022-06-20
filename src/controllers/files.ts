@@ -10,7 +10,6 @@ import _, { cloneDeep, values } from 'lodash';
 import { info } from 'console';
 import * as utils from '../utils/utils';
 import * as XLSX from 'xlsx';
-//var XLSX = require("xlsx");
 
 const constants: any = {
     lang: LANGS,
@@ -89,6 +88,9 @@ export const readFiles = async (dataDir: any) => {
                     const uri = project.path[lang];
                     const _lang: any = lang;
                     const jsonData = await fse.readJson(uri, { throws: false });
+                    if(jsonData === undefined || jsonData === null) {
+                        console.log(`Project::${project.name}::uri::${uri}::JSON is incorrect`);
+                    }
                     const jsonDataOrdered = Object.keys(jsonData).sort().reduce(
                         (obj: any, key: any) => {
                             obj[key] = jsonData[key];
@@ -144,7 +146,9 @@ export const readFiles = async (dataDir: any) => {
 export const exportProjectToFile = async (data: any): Promise<any> => {
     try {
         let url_ok: boolean = false;
-        const path = _.cloneDeep(PATH.IMPORT);
+        //const _pathExport = _.cloneDeep(PATH.EXPORT_URI);
+        const _pathExport = _.cloneDeep(PATH.IMPORT_URI);
+
         if (!fs.existsSync(PATH.EXPORT)) {
             fs.mkdirSync(PATH.EXPORT);
         }
@@ -163,7 +167,7 @@ export const exportProjectToFile = async (data: any): Promise<any> => {
 
             if (urlToLang.split('literales').length > 0) {
                 const dataFileExport: any = {};
-                let endPath = PATH.EXPORT_URI + urlToLang.split('literales')[1];
+                let endPath = _pathExport + urlToLang.split('literales')[1];
                 if (urlToLang.split('literales')[1].length > 0 && urlToLang.split('literales')[1][urlToLang.split('literales')[1].length - 1] !== '/') {
                     endPath = endPath + '/';
                 }
@@ -186,7 +190,8 @@ export const exportProjectToFile = async (data: any): Promise<any> => {
 
 const writeFileToDirExport = async (url: string, data: any) => {
     try {
-        const _url = (url[url.length - 1] === '/') ? url.slice(0, -1) : url;
+        let _url = (url[url.length - 1] === '/') ? url.slice(0, -1) : url;
+        _url = _url.replace('//','/');
         //const result = await fse.outputJson(_url, JSON.stringify(_.cloneDeep(data), null, 4));
         const result = await fse.outputFile(_url, JSON.stringify(_.cloneDeep(data), null, 4));
         const options = { ignoreCase: true, reverse: false, depth: 1 };
@@ -243,8 +248,7 @@ export const excel = () => {
         arrLangs: []
     };
     // Reading our test file
-    //const file = XLSX.readFile('./import/excel/template-translate.xlsx');
-    const file = XLSX.readFile('./import/excel/excel3.XLSX');
+    const file = XLSX.readFile(PATH.IMPORT_FILE);
     let data: any = [];
 
     const sheets = file.SheetNames;
