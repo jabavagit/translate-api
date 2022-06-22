@@ -47,17 +47,17 @@ export const LITERAL: ILiteral = {
     id: 0,
     name: '',
     langs: {
-        CA: '',
-        DE: '',
-        EN: '',
-        ES: '',
-        FR: '',
-        IT: '',
-        JA: '',
-        NL: '',
-        PT: '',
-        RU: '',
-        ZH: ''
+        CA: null,
+        DE: null,
+        EN: null,
+        ES: null,
+        FR: null,
+        IT: null,
+        JA: null,
+        NL: null,
+        PT: null,
+        RU: null,
+        ZH: null
     }
 };
 
@@ -104,7 +104,7 @@ export const MODEL_FILE_DB = {
     projects: [] 
 };
 export const PATH = {
-    IMPORT_URI: null,
+    IMPORT_URI: './import/literales/',
     IMPORT: './import/literals/',
     IMPORT_FILE: './import/excel/template-translate.xlsx',
     IMPORT_FILE_EXCEL: './export/excelToJson/excelToJson.json',

@@ -91,20 +91,20 @@ export const readFiles = async (dataDir: any) => {
                     if(jsonData === undefined || jsonData === null) {
                         console.log(`Project::${project.name}::uri::${uri}::JSON is incorrect`);
                     }
-                    const jsonDataOrdered = Object.keys(jsonData).sort().reduce(
-                        (obj: any, key: any) => {
+                    /*const jsonDataOrdered = Object.keys(jsonData).sort().reduce(
+                            (obj: any, key: any) => {
                             obj[key] = jsonData[key];
                             return obj;
                         },
                         {}
-                    );
+                    );*/
                     const _literals: any = [];
                     let _literal: ILiteral = _.cloneDeep(LITERAL);
                     let count = 0;
 
-                    for (const key in jsonDataOrdered) {
-                        if (Object.prototype.hasOwnProperty.call(jsonDataOrdered, key)) {
-                            const value = jsonDataOrdered[key];
+                    for (const key in jsonData) {
+                        if (Object.prototype.hasOwnProperty.call(jsonData, key)) {
+                            const value = jsonData[key];
                             if (_isFirst) {
                                 _literal.id = count;
                                 _literal.name = key;
@@ -174,7 +174,9 @@ export const exportProjectToFile = async (data: any): Promise<any> => {
                 urlToLang = endPath
                 for (let i = 0; i < data.literals.length; i++) {
                     const literal = data.literals[i];
-                    dataFileExport[literal.name] = literal.langs[_lang.toUpperCase()];
+                    if(literal.langs[_lang.toUpperCase()] !== null) {
+                        dataFileExport[literal.name] = literal.langs[_lang.toUpperCase()];
+                    }
                 }
                 await writeFileToDirExport(urlToLang, dataFileExport);
                 url_ok = true;
@@ -184,7 +186,7 @@ export const exportProjectToFile = async (data: any): Promise<any> => {
         if (url_ok)
             console.log('[Export]: success!');
     } catch (error) {
-        console.error('Error al borrar ' + error);
+        console.error(error);
     }
 };
 
@@ -192,10 +194,8 @@ const writeFileToDirExport = async (url: string, data: any) => {
     try {
         let _url = (url[url.length - 1] === '/') ? url.slice(0, -1) : url;
         _url = _url.replace('//','/');
-        //const result = await fse.outputJson(_url, JSON.stringify(_.cloneDeep(data), null, 4));
-        const result = await fse.outputFile(_url, JSON.stringify(_.cloneDeep(data), null, 4));
+        const result = await fse.outputFile(_url, JSON.stringify(_.cloneDeep(data), null, 2));
         const options = { ignoreCase: true, reverse: false, depth: 1 };
-        sortJson.overwrite(_url, options);
         console.log(`[Export] ${_url}`);
 
     } catch (error) {

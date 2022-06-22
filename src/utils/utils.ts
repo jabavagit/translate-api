@@ -136,11 +136,11 @@ export const getInfoFiltersToProjects = (project: IProject, typeFilter: string):
         countM = 0;
         countU = 0;
         _.forEach(arrLangs, (value: any) => {
-            if (value === '') {
+            if (value === null || value === '') {
                 countU++;
             }
 
-            if (value.length > 0) {
+            if (value?.length > 0) {
                 countM++;
             }
         });

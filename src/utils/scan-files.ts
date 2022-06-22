@@ -87,20 +87,20 @@ export const readFiles = async (dataDir: any) => {
                     const uri = project.path[lang];
                     const _lang: any = lang;
                     const jsonData = await fse.readJson(uri, { throws: false });
-                    const jsonDataOrdered = Object.keys(jsonData).sort().reduce(
+                    /*const jsonDataOrdered = Object.keys(jsonData).sort().reduce(
                         (obj: any, key: any) => {
                             obj[key] = jsonData[key];
                             return obj;
                         },
                         {}
-                    );
+                    );*/
                     const _literals: any = [];
                     let _literal: Literal = _.cloneDeep(LITERAL);
                     let count = 0;
 
-                    for (const key in jsonDataOrdered) {
-                        if (Object.prototype.hasOwnProperty.call(jsonDataOrdered, key)) {
-                            const value = jsonDataOrdered[key];
+                    for (const key in jsonData) {
+                        if (Object.prototype.hasOwnProperty.call(jsonData, key)) {
+                            const value = jsonData[key];
                             if (_isFirst) {
                                 _literal.id = count;
                                 _literal.name = key;
@@ -111,14 +111,15 @@ export const readFiles = async (dataDir: any) => {
                                 _literal = project.literals.find((elem: any) => elem.name === key);
                                 if (_literal) {
                                     // update translate literal
+
                                     _literal.lang[_lang] = value;
                                 } else {
                                     // no exist, and add new literal
-                                    const newLiteral = _.cloneDeep(LITERAL);
+                                    /*const newLiteral = _.cloneDeep(LITERAL);
                                     newLiteral.id = project.literals.length;
                                     newLiteral.name = key;
                                     newLiteral.lang[_lang] = value;
-                                    project.literals.push(newLiteral);
+                                    project.literals.push(newLiteral);*/
                                 }
                             }
 

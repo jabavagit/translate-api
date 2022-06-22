@@ -91,11 +91,11 @@ export const getItemsMenu = (data: any): any => {
             countM = 0;
             countU = 0;
             _.forEach(arrLangs, (value: string) => {
-                if (value === '') {
+                if (value === null || value === '') {
                     countU++;
                 }
 
-                if (value.length > 0) {
+                if (value?.length > 0) {
                     countM++;
                 }
             });
@@ -170,7 +170,7 @@ const filterData = (literals: ILiteral[], typeFilter: string): ILiteral[] => {
             const __literal: ILiteral = literals[key];
             let result = false;
             for (const key in __literal.langs) {
-                if (Object.prototype.hasOwnProperty.call(__literal.langs, key) && __literal.langs[key].length === 0) {
+                if (Object.prototype.hasOwnProperty.call(__literal.langs, key) && (__literal.langs[key] === null || __literal.langs[key]?.length === 0)) {
                     result = true;
                     count++;
                 }
@@ -180,7 +180,7 @@ const filterData = (literals: ILiteral[], typeFilter: string): ILiteral[] => {
                 filters.missing.push(__literal);
             }
 
-            if (count === Object.keys(__literal.langs).length) {
+            if (count === Object.keys(__literal.langs)?.length) {
                 filters.untranslated.push(__literal);
             }
 
@@ -222,7 +222,7 @@ const getInfoLang = (langs: any) => {
                 }
             }
         }
-        if (Object.keys(langs).length === countSuccess) {
+        if (Object.keys(langs)?.length === countSuccess) {
             isAllSuccess = true;
         }
 
@@ -234,7 +234,7 @@ const getInfoLang = (langs: any) => {
         for (const key in langs) {
             if (Object.prototype.hasOwnProperty.call(langs, key)) {
                 const element = langs[key];
-                if (lang === key && element.length > 0) {
+                if (lang === key && element?.length > 0) {
                     res = `<span class="text-success">${lang}</span>`;
                 }
             }
@@ -397,7 +397,7 @@ export const search = (search: string) => {
         const _project: IProject | null = (_model.dashboard?.project) ? _model.dashboard?.project : null;
         if (_project?.literals) {
             filterByKeys = _project.literals.filter((element: ILiteral) => element.name.toUpperCase().includes(search.toUpperCase()));
-            filterByLangES = _project.literals.filter((element: ILiteral) => element.langs.ES.toUpperCase().includes(search.toUpperCase()));
+            filterByLangES = _project.literals.filter((element: ILiteral) => element.langs.ES?.toUpperCase().includes(search.toUpperCase()));
             if (filterByKeys) {
                 resultFilters = filterByKeys;
             }
