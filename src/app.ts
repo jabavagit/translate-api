@@ -2,7 +2,8 @@ import compression from 'compression';
 import express from 'express';
 import morgan from 'morgan';
 import { NODE_ENV, PORT, LOG_FORMAT } from '@config';
-import { Routes } from '@interfaces/routes.interface';
+//import { Routes } from '@interfaces/routes.interface';
+import { Routes } from '@/types/api.type';
 import errorMiddleware from '@middlewares/error.middleware';
 import { logger, stream } from '@utils/logger';
 

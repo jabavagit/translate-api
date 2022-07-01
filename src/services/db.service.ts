@@ -1,44 +1,37 @@
+/* eslint-disable prettier/prettier */
+import { Project } from '@/types/api.type';
 import { HttpException } from '@exceptions/HttpException';
 import { isEmpty } from '@utils/util';
 import _ from 'lodash';
+//import { LowSync, JSONFileSync } from 'lowdb';
+const FileSync = require('lowdb/adapters/FileSync');
+const lowDB = require('lowdb');
+import * as path from 'path';
 
 class DbServices {
-  static setDataJson(_project: any, arg1: any, url: string) {
-    throw new Error('Method not implemented.');
-  }
-  public setDataJson = (project: any, data: any, url: string) => {
-    const modelFiles = {
-      idProject: 0,
-      nameProject: '',
-      url: '',
-      lang: '',
-      nameLiteral: '',
-      valueLiteral: '',
-      order: 0,
-    };
-    const result = [];
-    let order = 0;
-
-    for (const key in data) {
-      if (Object.prototype.hasOwnProperty.call(data, key)) {
-        const _value = data[key];
-        const _model = _.cloneDeep(modelFiles);
-        _model.idProject = project.id;
-        _model.nameProject = project.name;
-        _model.url = url;
-        _model.nameLiteral = key;
-        _model.valueLiteral = _value;
-        _model.order = order;
-        order++;
-
-        result.push(_model);
-      }
-    }
-
-    console.log(result);
+  private file_DB = '../db/db-lowdb.json';
+  private db: any;
+  private model_db = {
+    version: 2,
+    createDate: '',
+    projects: [],
   };
 
+  public init = () => {
+    const url = path.join(__dirname, this.file_DB);
+    const adapter = new FileSync(url);
+    this.db = lowDB(adapter);
+    this.model_db.createDate = new Date().toJSON();
+    this.db.defaults(this.model_db).write();
+  };
 
+  public setDataFiles = (data: any) => {
+    this.db.get('projects').assign(data).write();
+  };
+
+  public getProject = (idProject?: number): Project[] => {
+    return this.db.get('projects').filter({ 'idProject': idProject }).value();
+  };
 }
 
 export default DbServices;

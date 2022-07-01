@@ -1,18 +1,17 @@
-import { logger } from '@utils/logger';
+import { IMPORT_MOCK_DIR, IMPORT_DIR } from '@config';
 import * as fs from 'fs';
 import _ from 'lodash';
 import * as path from 'path';
-import dbService from '@services/db.service';
 
-const folder_import = '../import/literales';
+const pathImport: string = IMPORT_DIR && IMPORT_DIR.length > 0 ? IMPORT_DIR : IMPORT_MOCK_DIR;
 
-export const readFolders = (_folder?: string) => {
+export const readFolders = (_folder?: string): any => {
   let result: any[] = [];
-  let directoryPath = path.join(__dirname, folder_import);
+  let directoryPath = pathImport; //path.join(__dirname, pathImport);
   const arrFolders: any[] = [];
   const arrFiles: any[] = [];
   if (_folder) {
-    directoryPath = `${directoryPath}\\${_folder}`;
+    directoryPath = `${directoryPath}/${_folder}`;
   }
 
   if (fs.existsSync(directoryPath)) {
@@ -34,32 +33,41 @@ export const readFolders = (_folder?: string) => {
   }
 };
 
-export const redFilesAndSetDB = (idProjects: number[], model) => {
-  const result = [];
+export const readFiles = (idProjects: number[], model: any) => {
+  let result: any = [];
+  let countId = 0;
+
   idProjects.forEach((id: number) => {
     for (const key in model) {
       if (Object.prototype.hasOwnProperty.call(model, key)) {
         const _project = model[key];
         if (_project.id === id && _project.files) {
-          const data = readFilesJson(_project);
-          result.push(data);
+          const data: any = readFilesJson(_project);
+          //result.push(data);
+          result = [...result, ...data];
         }
       }
     }
+  });
+
+  result.forEach((element: any) => {
+    element.id = countId;
+    countId++;
   });
 
   return result;
 };
 
 export const readFilesJson = (_project: any) => {
-  let url = _.cloneDeep(folder_import);
-  let model = null;
+  const url: any = _.cloneDeep(pathImport);
+  let model: any = [];
 
-  _project.files.forEach(file => {
-    url = path.join(__dirname, `${url}/${_project.name}/${file}`);
-    if (url.includes('.json') && fs.existsSync(url)) {
-      const rawdata: any = fs.readFileSync(url);
-      model = setDataJsonToModel(_project, JSON.parse(rawdata), url);
+  _project.files.forEach((file: any) => {
+    const pathUrl: string = path.join(__dirname, `${url}/${_project.name}/${file}`);
+    if (pathUrl.includes('.json') && fs.existsSync(pathUrl)) {
+      const rawdata: any = fs.readFileSync(pathUrl);
+      const dataFile = setDataJsonToModel(_project, JSON.parse(rawdata), pathUrl);
+      model = [...model, ...dataFile];
     }
   });
 
@@ -67,7 +75,8 @@ export const readFilesJson = (_project: any) => {
 };
 
 const setDataJsonToModel = (project: any, data: any, url: string) => {
-  const modelFiles = {
+  const modelFiles: any = {
+    id: 0,
     idProject: 0,
     nameProject: '',
     url: '',
@@ -89,8 +98,13 @@ const setDataJsonToModel = (project: any, data: any, url: string) => {
       _model.nameLiteral = key;
       _model.valueLiteral = _value;
       _model.order = order;
+      const urlSplit = url.split('\\');
+      if (urlSplit && urlSplit.length > 0) {
+        const nameFileLang = urlSplit[urlSplit.length - 1];
+        const langSplit = nameFileLang?.split('.');
+        _model.lang = langSplit && langSplit.length > 0 ? langSplit[0] : '';
+      }
       order++;
-
       result.push(_model);
     }
   }
